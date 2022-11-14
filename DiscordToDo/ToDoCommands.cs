@@ -14,43 +14,7 @@ public class ToDoCommands: ApplicationCommandModule
     }
 
     ToDoSingleton singleton = ToDoSingleton.Instance;
-    [SlashCommand("Setup", "creates a new ToDoList")]
-    public async Task SetupTaskList(InteractionContext ctx,
-        [Option("Title", "ToDoList Title")] string title,
-        [Option("Description", "an optional description for the List")] string? description = "",
-        [Option("includeUsers", "should user who added item be shown in list")] bool includeUsers = true)
-    {
-        var channelId = ctx.Interaction.ChannelId;
-        bool listPresent = singleton._Lists.TryGetValue(channelId, out var list);
-
-        await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
-
-        if (listPresent)
-        {
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("List Already added"));
-            await Task.Delay(2000);
-            await ctx.DeleteResponseAsync();
-            return;
-        }
-
-        var message = await ctx.GetOriginalResponseAsync();
-
-        var item = new ToDoList(message.Id, title, ctx.Member.DisplayName, ctx.Member.GuildAvatarUrl ?? ctx.Member.AvatarUrl ?? ctx.Member.DefaultAvatarUrl, description, includeUsers);
-
-        if(ctx.Member.Id == 137654794717364224 || ctx.Member.Id == 247150837967618068 || ctx.Member.Id == 201073785099649026)
-        {
-            item._ToDoList.Add(new ToDo("Arcane", "Deek", true));
-            item._ToDoList.Add(new ToDo("Fullmetal Alchemist Brotherhood", "baoba", true));
-            item._ToDoList.Add(new ToDo("Dune (2021)", "Tom", false));
-            item._ToDoList.Add(new ToDo("Jujutsu Kaisen 0 (movie)", "Deek", false));
-            item._ToDoList.Add(new ToDo("Burn the Witch", "Deek", false));
-        }
-
-        await ctx.EditFollowupAsync(message.Id, new DiscordWebhookBuilder().AddEmbed(ToDoMessageBuilder(item)));
-
-        singleton._Lists.Add(channelId, item);
-    }
-
+    
     [SlashCommand("createList", "creates a new ToDoList")]
     public async Task CreateTaskList(InteractionContext ctx,
         [Option("Title", "ToDoList Title")] string title,
