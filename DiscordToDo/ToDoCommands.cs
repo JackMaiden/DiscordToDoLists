@@ -1,4 +1,4 @@
-﻿using DiscordToDo;
+using DiscordToDo;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
@@ -89,7 +89,7 @@ public class ToDoCommands: ApplicationCommandModule
 
         await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Adding"));
 
-        list!._ToDoList.Add(new ToDo(item, ctx.Member.DisplayName, false, amount));
+        list!._ToDoList.Add(new ToDo(item, $"<@!{ctx.Member.Id}>", false, amount));
 
         await ctx.EditFollowupAsync(list._ListMessageId, new DiscordWebhookBuilder().AddEmbed(ToDoMessageBuilder(list)));
 
